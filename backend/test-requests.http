@@ -1,7 +1,4 @@
-GET http://localhost:8080/api/2fa/code
+GET http://localhost:8080/api/2fa/code?phone_number=
 
 ###
-GET http://localhost:8080/api/2fa/check?code=4457&request_id=d3e0865ba070407bae5643dda33a75c4
-
-###
-GET https://api.nexmo.com/verify/json?api_key=59b4bba9&api_secret=4ZZ2oxAGXxSXFmcw&number=4917623577377&brand=JosefDemo
+GET http://localhost:8080/api/2fa/check?code=XXX&request_id=YYY
