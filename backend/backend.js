@@ -1,47 +1,18 @@
 const express = require('express');
 const cors = require('cors');
 const http = require('http');
-const OpenTok = require('opentok');
+const {createSession} = require('./video');
+const {requestCode, checkCode} = require('./2fa');
 
-const apiKey = process.env.VONAGE_API_KEY;
-const secret = process.env.VONAGE_SECRET;
-
-if (!apiKey || !secret) {
-	console.error('Please specify API key and secret as environment variable!');
-	process.exit();
-}
-
-const openTok = new OpenTok(apiKey, secret);
-var session = null;
-
-function createSession(request, response) {
-	console.log('Create session ...');
-	if (session == null) {
-		openTok.createSession({ mediaMode: 'routed' }, function (err, newSession) {
-			if (err) {
-				console.log(err);
-				response.status(500);
-			} else {
-				console.log('Create new session')
-				session = newSession;
-				response.json(createResponse(session));
-			}
-		});
-	} else {
-		response.json(createResponse(session));
-	}
-}
-
-function createResponse(session) {
-	const sessionId = session.sessionId;
-	const token = session.generateToken();
-	console.log('Session ID', sessionId);
-	console.log('Token', token);
-
-	return { sessionId, token };
+function logRequest(request, response, next) {
+    console.debug('REQUEST', request);
+    next();
 }
 
 const app = express();
 app.use(cors());
-app.get('/api/session', createSession);
+// app.use(logRequest);
+app.get('/api/video/session', createSession);
+app.get('/api/2fa/code', requestCode);
+app.get('/api/2fa/check', checkCode); // example: /api/2fa/check?code=1234&request_id=1234567890
 http.createServer(app).listen(8080);

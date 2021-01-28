@@ -9,8 +9,11 @@
   "author": "Josef Bauer <josef.bauer.1st@gmail.com>",
   "license": "ISC",
   "dependencies": {
+    "@vonage/server-sdk": "^2.10.5",
     "cors": "^2.8.5",
     "express": "^4.17.1",
+    "mongoose": "^5.11.13",
+    "nexmo": "^2.9.1",
     "nodemon": "^2.0.7",
     "opentok": "^2.11.0"
   }
