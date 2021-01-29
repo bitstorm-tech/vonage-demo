@@ -1,15 +1,5 @@
-const Vonage = require('@vonage/server-sdk');
 const Appointment = require('./models/appointment');
-
-const apiKey = process.env.VONAGE_API_KEY;
-const apiSecret = process.env.VONAGE_SECRET;
-
-if (!apiKey || !apiSecret) {
-    console.error('Please provide NEXMO_API_KEY and NEXMO_SECRET as environment variables!');
-    process.exit();
-}
-
-const vonage = new Vonage({apiKey, apiSecret}, {debug: false});
+const {vonage} = require('./vonage-utils');
 
 function processResult(error, result, response) {
     if (error) {
@@ -41,7 +31,10 @@ exports.requestCode = (request, response) => {
         } else {
             console.log('Result:', result);
             Appointment
-                .findOneAndUpdate({phoneNumber}, {requestId: result.request_id}, {upsert: true, useFindAndModify: false})
+                .findOneAndUpdate({phoneNumber}, {requestId: result.request_id}, {
+                    upsert: true,
+                    useFindAndModify: false,
+                })
                 .then(() => {
                     response.json({requestId: result.request_id});
                 })
