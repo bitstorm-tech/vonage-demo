@@ -39,7 +39,7 @@ exports.requestCode = (request, response) => {
 exports.getAppointment = (request, response) => {
     const phoneNumber = request.query.phone_number;
     const code = request.query.code;
-    console.log(`Check code ${code} for phone number ${phoneNumber} ...`);
+    console.log(`Get appointment for phone number ${phoneNumber} with code ${code}  ...`);
 
     Appointment.findOne({phoneNumber})
         .then(appointment => {
@@ -52,6 +52,7 @@ exports.getAppointment = (request, response) => {
                     response.status(500).send('Error: ' + error);
                 } else {
                     console.log('Result:', result);
+                    console.log('Appointment: ', appointment);
                     response.json(appointment);
                 }
             });

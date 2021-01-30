@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { CodeService } from '../code.service';
+import { AppointmentService } from '../appointment.service';
 
 @Component({
     selector: 'app-get-code',
@@ -15,7 +15,7 @@ export class GetCodePage implements OnInit {
     constructor(
         private alertController: AlertController,
         private http: HttpClient,
-        private codeService: CodeService,
+        private appointmentService: AppointmentService,
         private router: Router
     ) {
     }
@@ -24,13 +24,16 @@ export class GetCodePage implements OnInit {
     }
 
     getCode() {
-        this.http.get<{ status }>('http://localhost:8080/api/insights?phone_number=' + this.phoneNumber)
+        this.http.get<{ status }>('http://localhost:8080/api/insight?phone_number=' + this.phoneNumber)
             .toPromise()
             .then(result => {
                 if (result.status === 3) {
                     this.showAlert('The phone number you have entered is not valid.', 'Invalid');
                 } else {
-                    this.codeService.phoneNumber = this.phoneNumber;
+                    this.http.get('http://localhost:8080/api/2fa/code?phone_number=' + this.phoneNumber)
+                        .toPromise()
+                        .then();
+                    this.appointmentService.phoneNumber = this.phoneNumber;
                     this.router.navigate(['check-code']);
                 }
             })

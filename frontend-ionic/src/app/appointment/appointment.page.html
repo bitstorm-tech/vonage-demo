@@ -1,0 +1,41 @@
+<ion-header [translucent]="true">
+    <ion-toolbar>
+        <ion-title>
+            Corona Appointment
+        </ion-title>
+        <ion-buttons slot="start">
+            <ion-back-button defaultHref="/get-code"></ion-back-button>
+        </ion-buttons>
+    </ion-toolbar>
+</ion-header>
+
+<ion-content>
+    <ion-grid>
+        <ion-row>
+            <ion-col size-md="6" offset-md="3">
+                <ion-card>
+                    <ion-card-header>
+                        <ion-card-subtitle>
+                            Step 3/3 - Here you can manage your appointment
+                        </ion-card-subtitle>
+                    </ion-card-header>
+                    <ion-card-content>
+                        <p *ngIf="appointmentService.appointmentDate">
+                            Your appointment is on 2021-04-15 at 3:30 pm.
+                        </p>
+                        <ion-item *ngIf="!appointmentService.appointmentDate">
+                            <ion-label position="floating">Your appointment:</ion-label>
+                            <ion-datetime displayFormat="D MMM YYYY H:mm" placeholder="Select Date"
+                                          mode="ios" minuteValues="0,15,30,45" min="2021-01-31"
+                                          [(ngModel)]="appointmentDate" (ionChange)="saveDate()"></ion-datetime>
+                        </ion-item>
+                        <div class="ion-margin-top">
+                            <ion-button>Send Audio Call</ion-button>
+                            <ion-button>Call Service Staff</ion-button>
+                        </div>
+                    </ion-card-content>
+                </ion-card>
+            </ion-col>
+        </ion-row>
+    </ion-grid>
+</ion-content>
