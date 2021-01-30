@@ -16,8 +16,7 @@ import { AppComponent } from './app.component';
         BrowserModule,
         AppRoutingModule,
         IonicModule.forRoot({
-            rippleEffect: false,
-            mode: 'ios'
+            // mode: 'ios'
         }),
     ],
     providers: [
