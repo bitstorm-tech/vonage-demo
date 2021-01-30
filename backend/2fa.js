@@ -1,16 +1,6 @@
 const Appointment = require('./models/appointment');
 const {vonage} = require('./vonage-utils');
 
-function processResult(error, result, response) {
-    if (error) {
-        console.error('Error:', error);
-        response.send('Error: ' + error);
-    } else {
-        console.log('Result:', result);
-        response.send('Result: ' + result);
-    }
-}
-
 exports.requestCode = (request, response) => {
     console.log('Requesting code ...');
     const phoneNumber = request.query.phone_number;
@@ -46,13 +36,28 @@ exports.requestCode = (request, response) => {
     });
 };
 
-exports.checkCode = (request, response) => {
-    const requestId = request.query.request_id;
+exports.getAppointment = (request, response) => {
+    const phoneNumber = request.query.phone_number;
     const code = request.query.code;
-    console.log(`Check code ${code} for request with ID ${requestId} ...`);
+    console.log(`Check code ${code} for phone number ${phoneNumber} ...`);
 
-    vonage.verify.check({
-        request_id: requestId,
-        code,
-    }, (error, result) => processResult(error, result, response));
+    Appointment.findOne({phoneNumber})
+        .then(appointment => {
+            vonage.verify.check({
+                request_id: appointment.requestId,
+                code,
+            }, (error, result) => {
+                if (error) {
+                    console.error('Error:', error);
+                    response.status(500).send('Error: ' + error);
+                } else {
+                    console.log('Result:', result);
+                    response.json(appointment);
+                }
+            });
+        })
+        .catch(error => {
+            console.error(`Error while find appointment with phone number ${phoneNumber}`, error);
+            response.status(500).send(error);
+        });
 };
