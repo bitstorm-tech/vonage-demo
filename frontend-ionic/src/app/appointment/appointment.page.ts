@@ -23,4 +23,12 @@ export class AppointmentPage implements OnInit {
         this.appointmentService.updateAppointmentDate(this.appointmentDate)
             .catch(error => this.alertService.showAlert(error.message));
     }
+
+    openVideo() {
+        this.appointmentService.openVideoSession();
+    }
+
+    makeCall() {
+        this.appointmentService.makeAppointmentCall();
+    }
 }
