@@ -20,10 +20,7 @@
                         </ion-card-subtitle>
                     </ion-card-header>
                     <ion-card-content>
-                        <p *ngIf="appointmentService.appointmentDate">
-                            Your appointment is on 2021-04-15 at 3:30 pm.
-                        </p>
-                        <ion-item *ngIf="!appointmentService.appointmentDate">
+                        <ion-item>
                             <ion-label position="floating">Your appointment:</ion-label>
                             <ion-datetime displayFormat="D MMM YYYY H:mm" placeholder="Select Date"
                                           mode="ios" minuteValues="0,15,30,45" min="2021-01-31"

@@ -3,7 +3,7 @@ const apiKey = process.env.VONAGE_API_KEY;
 const apiSecret = process.env.VONAGE_SECRET;
 
 if (!apiKey || !apiSecret) {
-    console.error('Please provide NEXMO_API_KEY and NEXMO_SECRET as environment variables!');
+    console.error('Please provide VONAGE_API_KEY and VONAGE_SECRET as environment variables!');
     process.exit();
 }
 

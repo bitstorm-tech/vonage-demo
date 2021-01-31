@@ -1,4 +1,5 @@
 import { Component, OnInit } from '@angular/core';
+import { AlertService } from '../alert.service';
 import { AppointmentService } from './appointment.service';
 
 @Component({
@@ -9,13 +10,17 @@ import { AppointmentService } from './appointment.service';
 export class AppointmentPage implements OnInit {
     appointmentDate: string;
 
-    constructor(public appointmentService: AppointmentService) {
+    constructor(public appointmentService: AppointmentService, private alertService: AlertService) {
     }
 
     ngOnInit() {
+        if (this.appointmentService.appointmentDate) {
+            this.appointmentDate = this.appointmentService.appointmentDate;
+        }
     }
 
     saveDate() {
-        console.log(this.appointmentDate);
+        this.appointmentService.updateAppointmentDate(this.appointmentDate)
+            .catch(error => this.alertService.showAlert(error.message));
     }
 }

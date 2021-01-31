@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { LoadingController } from '@ionic/angular';
+import { AlertService } from '../alert.service';
 import { AppointmentService } from '../appointment/appointment.service';
 
 @Component({
@@ -13,40 +14,43 @@ export class GetCodePage implements OnInit {
     phoneNumber: number;
 
     constructor(
-        private alertController: AlertController,
+        private alertService: AlertService,
         private http: HttpClient,
         private appointmentService: AppointmentService,
-        private router: Router
+        private router: Router,
+        private loadingController: LoadingController
     ) {
     }
 
     ngOnInit() {
     }
 
-    getCode() {
-        this.http.get<{ status }>('http://localhost:8080/api/insight?phone_number=' + this.phoneNumber)
-            .toPromise()
+    sendCode() {
+        let loading;
+        this.loadingController.create({message: 'Sending code ...'}).then(l => {
+            loading = l;
+            loading.present();
+        });
+
+        this.appointmentService.getPhoneNumberStatus(this.phoneNumber)
             .then(result => {
                 if (result.status === 3) {
-                    this.showAlert('The phone number you have entered is not valid.', 'Invalid');
+                    this.alertService.showAlert('The phone number you have entered is not valid.', 'Invalid');
                 } else {
-                    this.http.get('http://localhost:8080/api/2fa/code?phone_number=' + this.phoneNumber)
-                        .toPromise()
-                        .then();
+                    this.appointmentService.sendCodeToPhone(this.phoneNumber)
+                        .then(() => loading.dismiss())
+                        .catch(error => {
+                            loading.dismiss();
+                            this.alertService.showAlert(error.message);
+                            return;
+                        });
                     this.appointmentService.phoneNumber = this.phoneNumber;
                     this.router.navigate(['check-code']);
                 }
             })
             .catch(error => {
-                this.showAlert(error.message);
+                loading.dismiss();
+                this.alertService.showAlert(error.message);
             });
-    }
-
-    showAlert(message: string, header = 'Oops, something went wrong :(') {
-        this.alertController.create({
-            header,
-            message,
-            buttons: ['OK']
-        }).then(alert => alert.present());
     }
 }

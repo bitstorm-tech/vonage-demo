@@ -35,30 +35,3 @@ exports.requestCode = (request, response) => {
         }
     });
 };
-
-exports.getAppointment = (request, response) => {
-    const phoneNumber = request.query.phone_number;
-    const code = request.query.code;
-    console.log(`Get appointment for phone number ${phoneNumber} with code ${code}  ...`);
-
-    Appointment.findOne({phoneNumber})
-        .then(appointment => {
-            vonage.verify.check({
-                request_id: appointment.requestId,
-                code,
-            }, (error, result) => {
-                if (error) {
-                    console.error('Error:', error);
-                    response.status(500).send('Error: ' + error);
-                } else {
-                    console.log('Result:', result);
-                    console.log('Appointment: ', appointment);
-                    response.json(appointment);
-                }
-            });
-        })
-        .catch(error => {
-            console.error(`Error while find appointment with phone number ${phoneNumber}`, error);
-            response.status(500).send(error);
-        });
-};

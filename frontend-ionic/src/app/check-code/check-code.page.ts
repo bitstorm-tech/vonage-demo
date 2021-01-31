@@ -1,7 +1,8 @@
 import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
-import { AlertController } from '@ionic/angular';
+import { AlertService } from '../alert.service';
+import { Appointment } from '../appointment/appointment.model';
 import { AppointmentService } from '../appointment/appointment.service';
 
 @Component({
@@ -15,7 +16,7 @@ export class CheckCodePage implements OnInit {
     constructor(private appointmentService: AppointmentService,
                 private http: HttpClient,
                 private router: Router,
-                private alert: AlertController) {
+                private alertService: AlertService) {
     }
 
     ngOnInit() {
@@ -26,26 +27,18 @@ export class CheckCodePage implements OnInit {
         const phoneNumber = this.appointmentService.phoneNumber;
 
         if (!code || !phoneNumber) {
-            this.alert.create({
-                header: 'Missing parameters',
-                message: 'Either phone number or code is missing (or both)',
-                buttons: ['OK']
-            }).then(alert => alert.present);
+            this.alertService.showAlert('Either phone number or code is missing (or both)', 'Missing parameters');
             return;
         }
 
         const url = `http://localhost:8080/api/appointment?code=${code}&phone_number=${phoneNumber}`;
-        this.http.get<{ appointmentDate }>(url).toPromise()
-            .then(appointment => {
-                this.appointmentService.appointmentDate = appointment.appointmentDate;
+        this.http.get<string>(url).toPromise()
+            .then(appointmentDate => {
+                this.appointmentService.appointmentDate = appointmentDate;
                 this.router.navigate(['appointment']);
             })
             .catch(error => {
-                this.alert.create({
-                    header: 'Oops, something went wrong :(',
-                    message: error,
-                    buttons: ['OK']
-                }).then(alert => alert.present);
+                this.alertService.showAlert(error.message);
             });
     }
 }
