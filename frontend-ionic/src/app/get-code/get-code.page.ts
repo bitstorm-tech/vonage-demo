@@ -2,7 +2,7 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertController } from '@ionic/angular';
-import { AppointmentService } from '../appointment.service';
+import { AppointmentService } from '../appointment/appointment.service';
 
 @Component({
     selector: 'app-get-code',
