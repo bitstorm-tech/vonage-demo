@@ -14,6 +14,6 @@ export class AlertService {
             header,
             message,
             buttons: ['OK']
-        }).then(alert => alert.present);
+        }).then(alert => alert.present());
     }
 }

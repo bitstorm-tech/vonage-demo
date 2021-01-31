@@ -2,7 +2,6 @@ import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../alert.service';
-import { Appointment } from '../appointment/appointment.model';
 import { AppointmentService } from '../appointment/appointment.service';
 
 @Component({
