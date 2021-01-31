@@ -2,6 +2,3 @@ GET http://localhost:8080/api/insights?phone_number=PHONENUMBER
 
 ###
 GET http://localhost:8080/api/2fa/code?phone_number=PHONENUMBER
-
-###
-GET http://localhost:8080/api/2fa/check?code=CODE&request_id=REQUESTID
