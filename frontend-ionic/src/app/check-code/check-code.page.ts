@@ -26,7 +26,9 @@ export class CheckCodePage implements OnInit {
         const phoneNumber = this.appointmentService.phoneNumber;
 
         if (!code || !phoneNumber) {
-            this.alertService.showAlert('Either phone number or code is missing (or both)', 'Missing parameters');
+            this.alertService.showAlert(
+                'Either phone number or code is missing (or both). Please start with step 1/3 again.',
+                'Missing parameters');
             return;
         }
 
@@ -37,7 +39,8 @@ export class CheckCodePage implements OnInit {
                 this.router.navigate(['appointment']);
             })
             .catch(error => {
-                this.alertService.showAlert(error.message);
+                console.log(error);
+                this.alertService.showAlert(error.error);
             });
     }
 }

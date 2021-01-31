@@ -20,7 +20,8 @@
                         <ion-item>
                             <ion-label position="floating">Phone Number</ion-label>
                             <ion-input inputmode="tel" type="tel" clearInput="true"
-                                       [(ngModel)]="phoneNumber"></ion-input>
+                                       [(ngModel)]="phoneNumber" (keydown.enter)="sendCode()">
+                            </ion-input>
                         </ion-item>
                         <div class="ion-margin-top ion-text-center">
                             <ion-button [disabled]="!phoneNumber" (click)="sendCode()">

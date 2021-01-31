@@ -36,6 +36,7 @@ export class GetCodePage implements OnInit {
             .then(result => {
                 if (result.status === 3) {
                     this.alertService.showAlert('The phone number you have entered is not valid.', 'Invalid');
+                    loading.dismiss();
                 } else {
                     this.appointmentService.sendCodeToPhone(this.phoneNumber)
                         .then(() => loading.dismiss())

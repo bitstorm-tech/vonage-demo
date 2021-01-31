@@ -4,7 +4,7 @@ const {vonage} = require('./vonage-utils');
 exports.getAppointmentDate = (request, response) => {
     const phoneNumber = request.query.phone_number;
     const code = request.query.code;
-    console.log(`Get appointment for phone number ${phoneNumber} with code ${code}  ...`);
+    console.log(`Get appointment date for phone number ${phoneNumber} with code ${code}  ...`);
 
     Appointment.findOne({phoneNumber})
         .then(appointment => {
@@ -17,8 +17,12 @@ exports.getAppointmentDate = (request, response) => {
                     response.status(500).send('Error: ' + error);
                 } else {
                     console.log('Result:', result);
-                    console.log('Appointment: ', appointment);
-                    response.json(appointment.appointmentDate);
+                    if (result.status === '0') {
+                        console.log('Appointment: ', appointment);
+                        response.json(appointment.appointmentDate);
+                    } else {
+                        response.status(404).send(result.error_text);
+                    }
                 }
             });
         })
