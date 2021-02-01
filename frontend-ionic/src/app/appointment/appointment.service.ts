@@ -29,6 +29,11 @@ export class AppointmentService {
             .toPromise();
     }
 
+    getAppointmentDate(code: number) {
+        const url = `${this.backendHost}/api/appointment?code=${code}&phone_number=${this.phoneNumber}`;
+        return this.http.get<string>(url).toPromise();
+    }
+
     makeAppointmentCall() {
         this.http.get(`${this.backendHost}/api/voice/${this.phoneNumber}`)
             .toPromise();

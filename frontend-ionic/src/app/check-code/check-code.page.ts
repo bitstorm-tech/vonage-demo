@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { AlertService } from '../alert.service';
@@ -13,7 +12,6 @@ export class CheckCodePage implements OnInit {
     code: number;
 
     constructor(private appointmentService: AppointmentService,
-                private http: HttpClient,
                 private router: Router,
                 private alertService: AlertService) {
     }
@@ -32,8 +30,7 @@ export class CheckCodePage implements OnInit {
             return;
         }
 
-        const url = `http://localhost:8080/api/appointment?code=${code}&phone_number=${phoneNumber}`;
-        this.http.get<string>(url).toPromise()
+        this.appointmentService.getAppointmentDate(code)
             .then(appointmentDate => {
                 this.appointmentService.appointmentDate = appointmentDate;
                 this.router.navigate(['appointment']);

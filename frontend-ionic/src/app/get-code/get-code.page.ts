@@ -1,4 +1,3 @@
-import { HttpClient } from '@angular/common/http';
 import { Component, OnInit } from '@angular/core';
 import { Router } from '@angular/router';
 import { LoadingController } from '@ionic/angular';
@@ -15,7 +14,6 @@ export class GetCodePage implements OnInit {
 
     constructor(
         private alertService: AlertService,
-        private http: HttpClient,
         private appointmentService: AppointmentService,
         private router: Router,
         private loadingController: LoadingController
