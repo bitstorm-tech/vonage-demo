@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
 import * as OT from '@opentok/client';
+import { environment } from '../../environments/environment';
 
 @Injectable({
     providedIn: 'root'
@@ -8,32 +9,33 @@ import * as OT from '@opentok/client';
 export class AppointmentService {
     phoneNumber: number;
     appointmentDate: string;
+    private backendHost = environment.backendHost;
 
     constructor(private http: HttpClient) {
     }
 
     getPhoneNumberStatus(phoneNumber: number) {
-        return this.http.get<{ status }>(`http://localhost:8080/api/insight?phone_number=${phoneNumber}`)
+        return this.http.get<{ status }>(`${this.backendHost}/api/insight?phone_number=${phoneNumber}`)
             .toPromise();
     }
 
     sendCodeToPhone(phoneNumber: number) {
-        return this.http.get(`http://localhost:8080/api/2fa/code?phone_number=${phoneNumber}`)
+        return this.http.get(`${this.backendHost}/api/2fa/code?phone_number=${phoneNumber}`)
             .toPromise();
     }
 
     updateAppointmentDate(appointmentDate: string) {
-        return this.http.put(`http://localhost:8080/api/appointment/${this.phoneNumber}`, {appointmentDate})
+        return this.http.put(`${this.backendHost}/api/appointment/${this.phoneNumber}`, {appointmentDate})
             .toPromise();
     }
 
     makeAppointmentCall() {
-        this.http.get(`http://localhost:8080/api/voice/${this.phoneNumber}`)
+        this.http.get(`${this.backendHost}/api/voice/${this.phoneNumber}`)
             .toPromise();
     }
 
     openVideoSession() {
-        this.http.get('http://localhost:8080/api/video/session')
+        this.http.get(`${this.backendHost}/api/video/session`)
             .toPromise()
             .then((sessionIdAndToken: SessionIdAndToken) => {
                 console.log(sessionIdAndToken);
